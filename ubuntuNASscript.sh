@@ -3,6 +3,7 @@ sudo apt -y update
 sudo apt -y upgrade
 
 sudo apt install -y samba
+sudo apt install -y python3
 sudo apt install -y glances
 
 sudo mkfs.ext4 -F /dev/md1
