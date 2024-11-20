@@ -1,13 +1,9 @@
 #!/bin/bash
 
-#Script must be run from Root to add repos for InfluxDB and Grafana
+#must run from root
 
 sudo apt-get update -y
 sudo apt-get upgrade -y
-
-
-# node-red and NodeJS
-curl -sL https://raw.githubusercontent.com/node-red/linux-installers/master/deb/update-nodejs-and-nodered
 
 # InfluxDB v2 install
 curl --silent --location -O \
@@ -19,6 +15,7 @@ echo "943666881a1b8d9b849b74caebf02d3465d6beb716510d86a39f6c8e8dac7515  influxda
 && echo 'deb [signed-by=/etc/apt/trusted.gpg.d/influxdata-archive.gpg] https://repos.influxdata.com/debian stable main' \
 | tee /etc/apt/sources.list.d/influxdata.list
 sudo apt-get update && sudo apt-get install influxdb2 -y
+sudo systemctl unmask influxdb
 sudo service influxdb start
 
 #Mosquitto install
@@ -35,5 +32,15 @@ echo "deb [signed-by=/etc/apt/keyrings/grafana.gpg] https://apt.grafana.com stab
 sudo apt-get update -y
 sudo apt-get install -y grafana
 
-sudo systemctl enable grafana-server
-sudo systemctl start grafana-server
+sudo systemctl daemon-reload
+sudo systemctl enable grafana
+sudo systemctl start grafana
+
+# node-red and NodeJS
+bash <(curl -fsSL https://deb.nodesource.com/setup_23.x -o nodesource_setup.sh)
+sudo -E bash nodesource_setup.sh
+sudo apt-get install -y nodejs
+
+bash <(curl -sL https://raw.githubusercontent.com/node-red/linux-installers/master/deb/update-nodejs-and-nodered)
+sudo systemctl enable nodered
+sudo systemctl start nodered
